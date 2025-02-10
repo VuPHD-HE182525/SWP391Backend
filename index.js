@@ -6,12 +6,12 @@ import cookieParser from "cookie-parser"
 import morgan from "morgan"
 import helmet from "helmet"
 import connectDB from "./config/connectDB.js"
-import userRouter from "./router/user.router.js"
 
 const app = express();
 import cartRoutes from './routes/cart.routes.js'; // Add .js extension if it's a JS file
 import orderRoutes from './routes/order.routes.js'; // Add .js extension if it's a JS file
 import addressRoutes from './routes/address.routes.js'; // Add .js extension if it's a JS file
+import userRoutes from './routes/user.routes.js'
 app.use(cors());
 app.options('*', cors())
 
@@ -24,6 +24,7 @@ app.use(helmet({
 app.use('/api/cart', cartRoutes); // Mount cart routes at '/api/cart'
 app.use('/api/orders', orderRoutes); // Mount order routes at '/api/orders'
 app.use('/api/addresses', addressRoutes); // Mount address routes at '/api/addresses'
+app.use('/api/user', userRoutes);
 
 app.get("/", (request, response) => {
     ///server to client
@@ -34,7 +35,6 @@ app.get("/", (request, response) => {
     )
 })
 
-app.use("/api/user", userRouter)
 
 connectDB().then(() => {
     app.listen(process.env.PORT, () => {
