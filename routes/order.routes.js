@@ -1,8 +1,8 @@
-const express = require("express");
+import express from 'express';
 const router = express.Router();
-const Order = require("../models/order.model");
-const Cart = require("../models/cartproduct.model");
-const auth = require("../middleware/auth");
+import Order from '../models/order.model.js';
+import Cart from '../models/cartproduct.model.js';
+import auth from '../middleware/auth.js';
 
 router.post("/", auth, async (req, res) => {
     try {
@@ -55,4 +55,4 @@ router.get("/last", auth, async (req, res) => {
     }
 });
 
-module.exports = router;
+export default router;

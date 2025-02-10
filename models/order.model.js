@@ -30,7 +30,7 @@ const orderSchema = new mongoose.Schema(
     ],
 
     paymentId: {
-      name: String,
+      type: String,
       default: "",
     },
 

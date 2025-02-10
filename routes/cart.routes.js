@@ -1,7 +1,7 @@
-const express = require('express');
+import express from 'express';
 const router = express.Router();
-const CartProduct = require('../models/cartproduct.model');
-const auth = require('../middleware/auth'); // Import the middleware
+import CartProduct from '../models/cartproduct.model.js'; // Add .js extension!
+import auth from '../middleware/auth.js'; // Add .js extension!
 
 router.get('/', auth, async (req, res) => {
     try {
@@ -55,4 +55,4 @@ router.delete("/:id", auth, async (req, res) => {
     }
 });
 
-module.exports = router;
+export default router;
