@@ -1,6 +1,6 @@
 import { Router } from "express";
 import {loginUserController, logoutUserController, registerUserController, verifyEmailController} from "../controllers/user.controller.js";
-import auth from "../middlewares/auth.js";
+const auth = require("../middleware/auth");
 
 const userRouter = Router()
 userRouter.post("/register", registerUserController)

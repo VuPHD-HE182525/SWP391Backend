@@ -1,5 +1,10 @@
+<<<<<<< HEAD
 import jwt from 'jsonwebtoken';
 import User from '../models/user.model.js'; // Import the User model
+=======
+import jwt from 'jsonwebtoken'
+const User = require('../models/user.model'); // Import the User model
+>>>>>>> e84a6ae (no message)
 
 const auth = async (req, res, next) => {
     try {
