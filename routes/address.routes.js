@@ -1,7 +1,7 @@
-const express = require("express");
+import express from 'express';
 const router = express.Router();
-const Address = require("../models/address.model"); // Import your Address model
-const auth = require("../middleware/auth"); // Import your authentication middleware
+import Address from '../models/address.model.js'; // Import your Address model
+import auth from '../middleware/auth.js'; // Import your authentication middleware
 
 // Get all addresses for the authenticated user
 router.get("/", auth, async (req, res) => {
@@ -15,4 +15,4 @@ router.get("/", auth, async (req, res) => {
     }
 });
 
-module.exports = router;
+export default router;

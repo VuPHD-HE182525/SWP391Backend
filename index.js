@@ -8,9 +8,9 @@ import helmet from "helmet"
 import connectDB from "./config/connectDB.js"
 
 const app = express();
-const cartRoutes = require('./routes/cart.routes');
-const orderRoutes = require('./routes/order.routes');
-const addressRoutes = require('./routes/address.routes');
+import cartRoutes from './routes/cart.routes.js'; // Add .js extension if it's a JS file
+import orderRoutes from './routes/order.routes.js'; // Add .js extension if it's a JS file
+import addressRoutes from './routes/address.routes.js'; // Add .js extension if it's a JS file
 app.use(cors());
 app.options('*', cors())
 
