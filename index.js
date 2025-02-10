@@ -6,6 +6,7 @@ import cookieParser from "cookie-parser"
 import morgan from "morgan"
 import helmet from "helmet"
 import connectDB from "./config/connectDB.js"
+import userRouter from "./router/user.router.js"
 
 const app = express();
 import cartRoutes from './routes/cart.routes.js'; // Add .js extension if it's a JS file
@@ -32,6 +33,8 @@ app.get("/", (request, response) => {
         }
     )
 })
+
+app.use("/api/user", userRouter)
 
 connectDB().then(() => {
     app.listen(process.env.PORT, () => {
