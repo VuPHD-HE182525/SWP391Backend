@@ -59,15 +59,33 @@ const userSchema = mongoose.Schema({
         }
     ],
 
+    forgot_password_otp: {
+        type: String,
+        default: null
+    },
+
+    forgot_password_expiry: {
+        type: Date,
+        default: ""
+    },
+
+    otp: {
+        type: String,
+    },
+
+    otpExpires: {
+        type: Date,
+    },
+
     role: {
         type: String,
         enum: ["ADMIN", "USER"],
         default: "USER"
     }
 },
-    { timestamp: true }
+    { timestamps: true }  // Sửa `timestamp` thành `timestamps` để đúng cú pháp
 )
 
-const UserModel = mongoose.model("User", userSchema)
+const UserModel = mongoose.model("User", userSchema);
 
-export default UserModel
+export default UserModel;
