@@ -20,7 +20,7 @@ const productSchema = new mongoose.Schema({
         required: true,
     },
     image: {
-        type: String,
+        type: [String],
         required: true,
     },
     brand: {
@@ -53,8 +53,7 @@ const productSchema = new mongoose.Schema({
     },
     category: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Category',
-        required: true
+        ref: 'Category'
     },
     countInStock: {
         type: Number,
