@@ -26,5 +26,14 @@
     "multer": "^1.4.5-lts.1",
     "nodemailer": "^6.10.0",
     "nodemon": "^3.1.9"
-  }
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/VuPHD-HE182525/SWP391Backend.git"
+  },
+  "bugs": {
+    "url": "https://github.com/VuPHD-HE182525/SWP391Backend/issues"
+  },
+  "homepage": "https://github.com/VuPHD-HE182525/SWP391Backend#readme"
 }

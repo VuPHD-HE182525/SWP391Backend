@@ -36,7 +36,8 @@ const addressSchema = mongoose.Schema({
 
     userID: {
         type: mongoose.Schema.ObjectId,
-        default: ""
+        default: "",
+        ref: "User"
     }
 },
     { timestamp: true }
