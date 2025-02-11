@@ -24,12 +24,7 @@ const userSchema = mongoose.Schema({
 
     mobile: {
         type: Number,
-        default: null
-    },
-
-    verify_email: {
-        type: Boolean,
-        default: false
+        default: ""
     },
 
     last_login_date: {
@@ -64,20 +59,10 @@ const userSchema = mongoose.Schema({
         }
     ],
 
-    forgot_password_otp: {
-        type: String,
-        default: null
-    },
-
-    forgot_password_expiry: {
-        type: Date,
-        default: ""
-    },
-
     role: {
         type: String,
         enum: ["ADMIN", "USER"],
-        default: ""
+        default: "USER"
     }
 },
     { timestamp: true }
