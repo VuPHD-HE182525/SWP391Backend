@@ -6,6 +6,15 @@ const productSchema = new mongoose.Schema({
         required: true,
         unique: true
     },
+    price: {
+        type: Number,
+        required: true,
+        default: 0
+    },
+    oldPrice: {
+        type: Number,
+        default: 0
+    },
     description: {
         type: String,
         required: true,
@@ -17,14 +26,6 @@ const productSchema = new mongoose.Schema({
     brand: {
         type: String,
         default: ''
-    },
-    price: {
-        type: Number,
-        default: 0
-    },
-    oldPrice: {
-        type: Number,
-        default: 0
     },
     catName: {
         type: String,
@@ -53,7 +54,7 @@ const productSchema = new mongoose.Schema({
     category: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Category',
-
+        required: true
     },
     countInStock: {
         type: Number,
@@ -75,9 +76,8 @@ const productSchema = new mongoose.Schema({
         type: Date,
         default: Date.now
     },
-    
 }, { timestamps: true });
 
 const ProductModel = mongoose.model("Product", productSchema);
 
-export default ProductModel
+export default ProductModel;
