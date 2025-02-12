@@ -24,12 +24,7 @@ const userSchema = mongoose.Schema({
 
     mobile: {
         type: Number,
-        default: null
-    },
-
-    verify_email: {
-        type: Boolean,
-        default: false
+        default: ""
     },
 
     last_login_date: {
@@ -74,15 +69,23 @@ const userSchema = mongoose.Schema({
         default: ""
     },
 
+    otp: {
+        type: String,
+    },
+
+    otpExpires: {
+        type: Date,
+    },
+
     role: {
         type: String,
         enum: ["ADMIN", "USER"],
-        default: ""
+        default: "USER"
     }
 },
-    { timestamp: true }
+    { timestamps: true }  // Sửa `timestamp` thành `timestamps` để đúng cú pháp
 )
 
-const UserModel = mongoose.model("User", userSchema)
+const UserModel = mongoose.model("User", userSchema);
 
-export default UserModel
+export default UserModel;

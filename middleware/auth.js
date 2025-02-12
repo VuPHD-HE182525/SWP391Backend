@@ -3,20 +3,42 @@ import User from '../models/user.model.js'; // Import the User model
 
 const auth = async (req, res, next) => {
     try {
-        const token = req.header('Authorization').replace('Bearer ', '');
-        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        // Lấy token từ cookie hoặc header
+        const token = req.cookies.accessToken || req?.headers?.authorization?.split(" ")[1];
 
-        // Find the user from the database based on the decoded userId
-        const user = await User.findById(decoded.userId);
-
-        if (!user) {
-            throw new Error(); // Throw an error if the user is not found
+        if (!token) {
+            return res.status(401).json({
+                message: "Provide token",
+                error: true,
+                success: false
+            });
         }
 
-        req.user = user; // Add the complete user object to the request
+        // Giải mã token
+        const decoded = jwt.verify(token, process.env.SECRET_KEY_ACCESS_TOKEN || process.env.JWT_SECRET);
+
+        if (!decoded) {
+            return res.status(401).json({
+                message: "Unauthorized access",
+                error: true,
+                success: false
+            });
+        }
+
+        // Kiểm tra xem user có tồn tại không
+        const user = await User.findById(decoded.userId || decoded.id);
+        if (!user) {
+            return res.status(401).json({ error: 'Not authorized' });
+        }
+
+        req.user = user; // Gán user vào request để sử dụng sau này
         next();
     } catch (error) {
-        res.status(401).json({ error: 'Not authorized' });
+        return res.status(500).json({
+            message: "You have not logged in",
+            error: true,
+            success: false
+        });
     }
 };
 
