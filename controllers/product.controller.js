@@ -32,7 +32,7 @@ export async function uploadImages(request, response) {
                 options,
                 function (error, result) {
                     imagesArr.push(result.secure_url);
-                    fs.unlinkSync(`unloads/${request.files[i].filename}`);
+                    fs.unlinkSync(`uploads/${request.files[i].filename}`);
                 }
             );
         }
