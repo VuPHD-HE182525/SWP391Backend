@@ -7,14 +7,14 @@ import morgan from "morgan";
 import helmet from "helmet";
 import connectDB from "./config/connectDB.js";
 import userRouter from "./routes/user.routes.js";  // userRouter từ feature
-import productRouter from "./routes/product.route.js";  // productRouter từ feature
+import productRouter from "./routes/product.routes.js";  // productRouter từ feature
 
 const app = express();
-import cartRoutes from './routes/cart.routes.js'; 
-import orderRoutes from './routes/order.routes.js'; 
-import addressRoutes from './routes/address.routes.js'; 
+import cartRoutes from './routes/cart.routes.js';
+import orderRoutes from './routes/order.routes.js';
+import addressRoutes from './routes/address.routes.js';
 import userRoutes from './routes/user.routes.js'; // userRoutes từ develop
-import categoryRouter from "./routes/category.route.js";
+import categoryRouter from "./routes/category.routes.js";
 
 app.use(cors());
 app.options('*', cors());
