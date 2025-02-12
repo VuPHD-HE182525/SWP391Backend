@@ -22,9 +22,20 @@ const userSchema = mongoose.Schema({
         default: ""
     },
 
+    gender: {
+        type: String,
+        enum: ["Male", "Female"],
+        default: 'Male'
+    },
+
+    birthdate: {
+        type: Date,
+        required: [true, "Provide birth date"]
+    },
+
     mobile: {
-        type: Number,
-        default: ""
+        type: String,
+        required: [true, "Provide phone number"]
     },
 
     last_login_date: {
@@ -44,6 +55,16 @@ const userSchema = mongoose.Schema({
             ref: "address"
         }
     ],
+
+    access_token: {
+        type: String,
+        default: ''
+    },
+
+    refresh_token: {
+        type: String,
+        default: ''
+    },
 
     shopping_cart: [
         {
@@ -83,7 +104,7 @@ const userSchema = mongoose.Schema({
         default: "USER"
     }
 },
-    { timestamps: true }  // Sửa `timestamp` thành `timestamps` để đúng cú pháp
+    { timestamps: true }  
 )
 
 const UserModel = mongoose.model("User", userSchema);

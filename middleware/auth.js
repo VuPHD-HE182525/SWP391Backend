@@ -15,7 +15,7 @@ const auth = async (req, res, next) => {
         }
 
         // Giải mã token
-        const decoded = jwt.verify(token, process.env.SECRET_KEY_ACCESS_TOKEN || process.env.JWT_SECRET);
+        const decoded = jwt.verify(token, process.env.SECRET_ACCESS_TOKEN);
 
         if (!decoded) {
             return res.status(401).json({
@@ -25,13 +25,7 @@ const auth = async (req, res, next) => {
             });
         }
 
-        // Kiểm tra xem user có tồn tại không
-        const user = await User.findById(decoded.userId || decoded.id);
-        if (!user) {
-            return res.status(401).json({ error: 'Not authorized' });
-        }
-
-        req.user = user; // Gán user vào request để sử dụng sau này
+        req.userId = decoded.id 
         next();
     } catch (error) {
         return res.status(500).json({
