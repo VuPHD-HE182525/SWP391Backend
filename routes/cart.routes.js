@@ -7,7 +7,7 @@ router.get('/', auth, async (req, res) => {
     try {
         const loggedInUserId = req.user._id;
 
-        const cartItems = await CartProduct.find({ userId: loggedInUserId }).populate('productId');       
+        const cartItems = await CartProduct.find({ userId: loggedInUserId }).populate('productId');
         res.json(cartItems);
     } catch (error) {
         res.status(500).json({ error: 'Failed to fetch cart items' });
