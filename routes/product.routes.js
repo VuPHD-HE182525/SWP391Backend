@@ -15,7 +15,8 @@ import { createProduct,
     deleteProduct,
     getProduct,
     removeImageFromCloudinary,
-    updateProduct
+    updateProduct,
+    getProductsBySubCategory
 } from '../controllers/product.controller.js';
 
 const productRouter = Router();
@@ -38,6 +39,7 @@ productRouter.get('/:id', getProduct);
 productRouter.delete('/deleteImage', auth, removeImageFromCloudinary);
 productRouter.put('/updateProduct/:id', auth, updateProduct);
 
+productRouter.get('/products/bySubCategory', getProductsBySubCategory);
 
 
 
