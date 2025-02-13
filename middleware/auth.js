@@ -15,7 +15,7 @@ const auth = async (req, res, next) => {
         }
 
         // Giải mã token
-        const decoded = jwt.verify(token, process.env.SECRET_KEY_ACCESS_TOKEN || process.env.JWT_SECRET);
+        const decoded = jwt.verify(token, process.env.SECRET_KEY_ACCESS_TOKEN);
 
         if (!decoded) {
             return res.status(401).json({
