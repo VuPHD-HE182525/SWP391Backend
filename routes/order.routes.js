@@ -14,7 +14,7 @@ router.post("/", auth, async (req, res) => {
             subTotalAmt,
             totolAmt,
         } = req.body;
-        const userId = req.user.id;
+        const userId = req.user._id;
 
         const newOrder = new Order({
             userId: userId,
