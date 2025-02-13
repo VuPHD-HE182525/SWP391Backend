@@ -25,7 +25,7 @@ const addressSchema = mongoose.Schema({
     },
 
     mobile: {
-        type: Number,
+        type: String,
         default: null
     },
 
