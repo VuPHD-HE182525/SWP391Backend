@@ -113,38 +113,61 @@ export async function createCategory(request, response) {
 //get category
 export async function getCategories(request, response) {
     try {
+        console.log("📌 Đang lấy danh mục từ MongoDB...");
         const categories = await CategoryModel.find();
-        const categoryMap = {};
+        console.log("✅ Danh mục lấy được:", categories);
 
+        if (!categories.length) {
+            return response.status(404).json({
+                success: false,
+                message: "Không tìm thấy danh mục nào trong cơ sở dữ liệu!"
+            });
+        }
+
+        // Chuyển danh mục thành dạng map để dễ nhóm
+        const categoryMap = {};
         categories.forEach(cat => {
-            categoryMap[cat._id] = { ...cat._doc, children: [] };
+            categoryMap[cat._id] = { 
+                _id: cat._id,
+                name: cat.name, 
+                images: cat.images, 
+                parentId: cat.parentId ? cat.parentId.toString() : null, // Convert ObjectId thành string
+                children: [] 
+            };
         });
 
+        // Nhóm danh mục con vào danh mục cha
         const rootCategories = [];
-
         categories.forEach(cat => {
             if (cat.parentId) {
-                categoryMap[cat.parentId].children.push(categoryMap[cat._id]);
+                const parentIdStr = cat.parentId.toString();
+                if (categoryMap[parentIdStr]) {
+                    categoryMap[parentIdStr].children.push(categoryMap[cat._id]);
+                } else {
+                    console.warn(`⚠️ Không tìm thấy danh mục cha cho ID: ${cat._id}`);
+                }
             } else {
                 rootCategories.push(categoryMap[cat._id]);
             }
         });
 
-        response.status(200).json({
-            error: false,
-            success: true,
-            data: rootCategories
+        console.log("✅ Kết quả sau khi nhóm danh mục:", rootCategories);
 
-        })
+        return response.status(200).json({
+            success: true,
+            categories: rootCategories
+        });
 
     } catch (error) {
+        console.error("❌ Lỗi trong quá trình lấy danh mục:", error);
         return response.status(500).json({
-            message: error.message || error,
-            error: true,
-            success: false
-        })
+            success: false,
+            message: "Lỗi khi lấy danh mục",
+            error: error.message || error
+        });
     }
 }
+
 
 //get category count 
 export async function getCategoriesCount(request, response) {
