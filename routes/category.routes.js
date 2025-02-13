@@ -31,7 +31,4 @@ categoryRouter.put('/:id', auth, updatedCategory);
 
 
 
-
-
-
 export default categoryRouter;
