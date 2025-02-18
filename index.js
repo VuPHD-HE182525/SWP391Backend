@@ -6,7 +6,6 @@ import cookieParser from "cookie-parser";
 import morgan from "morgan";
 import helmet from "helmet";
 import connectDB from "./config/connectDB.js";
-import userRouter from "./routes/user.routes.js";  // userRouter từ feature
 import productRouter from "./routes/product.routes.js";  // productRouter từ feature
 
 const app = express();
@@ -30,8 +29,7 @@ app.use(helmet({
 app.use('/api/cart', cartRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/addresses', addressRoutes);
-app.use('/api/user', userRouter);   // Sử dụng userRouter từ feature
-app.use('/api/users', userRoutes);  // Giữ lại userRoutes từ develop
+app.use('/api/user', userRoutes);   // Sử dụng userRouter từ feature
 app.use('/api/category', categoryRouter);
 app.use('/api/product', productRouter);
 
