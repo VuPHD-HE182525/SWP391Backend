@@ -29,4 +29,4 @@ async function sendEmail(to, subject, text, html) {
     }
 }
 
-export {sendEmail};
+export default sendEmail;
