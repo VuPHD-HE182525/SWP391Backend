@@ -13,8 +13,9 @@ router.post("/", auth, async (req, res) => {
             delivery_address,
             subTotalAmt,
             totolAmt,
+            paymentMethod,
         } = req.body;
-        const userId = req.user._id;
+        const userId = req.userId;
 
         const newOrder = new Order({
             userId: userId,
@@ -24,10 +25,11 @@ router.post("/", auth, async (req, res) => {
             delivery_address: delivery_address,
             subTotalAmt: subTotalAmt,
             totolAmt: totolAmt,
+            paymentMethod: paymentMethod,
         });
 
         await newOrder.save();
-        await Cart.deleteMany({ user: userId });
+        await Cart.deleteMany({ userId: userId });
 
         res.status(201).json(newOrder);
     } catch (error) {
@@ -38,7 +40,7 @@ router.post("/", auth, async (req, res) => {
 
 router.get("/last", auth, async (req, res) => {
     try {
-        const userId = req.user.id;
+        const userId = req.userId;
         const lastOrder = await Order.findOne({ userId: userId })
             .sort({ createdAt: -1 })
             .populate("productId")
