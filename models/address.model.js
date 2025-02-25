@@ -38,11 +38,21 @@ const addressSchema = mongoose.Schema({
         type: mongoose.Schema.ObjectId,
         default: "",
         ref: "User"
+    },
+
+    fullName: {
+        type: String,
+        default: null
+    },
+
+    email: {
+        type: String,
+        default: null
     }
 },
     { timestamp: true }
 )
 
-const AddressModel = mongoose.model("address", addressSchema)
+const AddressModel = mongoose.model("Address", addressSchema)
 
 export default AddressModel

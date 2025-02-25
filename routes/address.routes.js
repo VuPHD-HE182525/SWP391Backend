@@ -6,8 +6,8 @@ import auth from '../middleware/auth.js'; // Import your authentication middlewa
 // Get all addresses for the authenticated user
 router.get("/", auth, async (req, res) => {
     try {
-        const userId = req.user.id; // Get the user ID from the authenticated user
-        const addresses = await Address.find({ user: userId }); // Find addresses associated with the user
+        const userId = req.userId; // Get the user ID from the authenticated user
+        const addresses = await Address.find({ userID: userId }); // Find addresses associated with the user
         res.status(200).json(addresses);
     } catch (error) {
         console.error("Error fetching addresses:", error);
@@ -17,16 +17,18 @@ router.get("/", auth, async (req, res) => {
 
 router.post("/", auth, async (req, res) => {
     try {
-        const { address_line, city, state, pincode, country, mobile } = req.body;
-        const userId = req.user._id; // Assuming your auth middleware adds this
+        const { fullName, address_line, city, state, pincode, country, mobile, email } = req.body;
+        const userId = req.userId; // Assuming your auth middleware adds this
 
         const newAddress = new Address({
+            fullName: fullName,
             address_line: address_line,
             city: city,
             state: state,
             pincode: pincode,
             country: country,
             mobile: mobile,
+            email: email,
             userID: userId, // Associate the address with the user
         });
 

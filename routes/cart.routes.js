@@ -5,7 +5,7 @@ import auth from '../middleware/auth.js'; // Add .js extension!
 
 router.get('/', auth, async (req, res) => {
     try {
-        const loggedInUserId = req.user._id;
+        const loggedInUserId = req.userId;
 
         const cartItems = await CartProduct.find({ userId: loggedInUserId }).populate('productId');
         res.json(cartItems);
@@ -18,7 +18,7 @@ router.put("/:id", auth, async (req, res) => {
     try {
         const cartItemId = req.params.id;
         const { quantity } = req.body;
-        const userId = req.user._id; // Get the authenticated user's ID
+        const userId = req.userId; // Get the authenticated user's ID
 
         // Find the cart item and check if it belongs to the user
         const cartItem = await CartProduct.findOne({ _id: cartItemId, userId });
@@ -40,7 +40,7 @@ router.put("/:id", auth, async (req, res) => {
 router.delete("/:id", auth, async (req, res) => {
     try {
         const cartItemId = req.params.id;
-        const userId = req.user._id; // Get the authenticated user's ID
+        const userId = req.userId; // Get the authenticated user's ID
 
         // Find the cart item and check if it belongs to the user
         const deletedCartItem = await CartProduct.findOneAndDelete({ _id: cartItemId, userId });
@@ -52,6 +52,35 @@ router.delete("/:id", auth, async (req, res) => {
         res.json({ message: "Cart item removed successfully" });
     } catch (error) {
         res.status(500).json({ error: "Failed to remove cart item" });
+    }
+});
+
+router.post("/", auth, async (req, res) => {
+    try {
+        const { productId, quantity } = req.body;
+        const userId = req.userId; // Get the authenticated user's ID
+
+        // Check if the product is already in the cart
+        const existingCartItem = await CartProduct.findOne({ userId, productId });
+
+        if (existingCartItem) {
+            // If the product is already in the cart, update the quantity
+            existingCartItem.quantity += quantity;
+            await existingCartItem.save();
+            return res.status(200).json(existingCartItem); // return the updated item
+        }
+
+        // If the product is not in the cart, create a new cart item
+        const newCartItem = new CartProduct({
+            userId,
+            productId,
+            quantity,
+        });
+
+        await newCartItem.save();
+        res.status(201).json(newCartItem);
+    } catch (error) {
+        res.status(500).json({ error: "Failed to add item to cart" });
     }
 });
 

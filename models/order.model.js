@@ -16,7 +16,7 @@ const orderSchema = new mongoose.Schema(
     productId: [
       {
         type: mongoose.Schema.ObjectId,
-        ref: "product",
+        ref: "Product",
       },
     ],
 
@@ -28,6 +28,11 @@ const orderSchema = new mongoose.Schema(
         price: Number,
       },
     ],
+
+    paymentMethod: {
+      type: String,
+      default: ""
+    },
 
     paymentId: {
       type: String,
@@ -41,7 +46,7 @@ const orderSchema = new mongoose.Schema(
 
     delivery_address: {
       type: mongoose.Schema.ObjectId,
-      ref: "address",
+      ref: "Address",
     },
 
     subTotalAmt: {
@@ -57,6 +62,6 @@ const orderSchema = new mongoose.Schema(
   { timestamps: true },
 );
 
-const OrderModel = mongoose.model("order", orderSchema);
+const OrderModel = mongoose.model("Order", orderSchema);
 
 export default OrderModel;
