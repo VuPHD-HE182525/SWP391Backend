@@ -35,8 +35,8 @@ app.use(helmet({
 app.use('/api/cart', cartRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/addresses', addressRoutes);
-app.use('/api/user', userRouter);   // Sử dụng userRouter từ feature
-app.use('/api/users', userRoutes);  // Giữ lại userRoutes từ develop
+app.use('/api/user', userRouter); 
+app.use('/api/users', userRoutes);
 app.use('/api/category', categoryRouter);
 app.use('/api/product', productRouter);
 
