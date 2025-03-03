@@ -53,10 +53,20 @@ export async function uploadImages(request, response) {
 //create product
 export async function createProduct(request, response) {
     try {
+        // Xử lý images để đảm bảo lưu nhiều ảnh
+        let images = "[]"; // Mặc định lưu danh sách rỗng
+        if (request.body.images) {
+            if (Array.isArray(request.body.images)) {
+                images = JSON.stringify(request.body.images); // Chuyển thành chuỗi JSON
+            } else if (typeof request.body.images === "string") {
+                images = JSON.stringify([request.body.images]); // Nếu chỉ có 1 ảnh, chuyển thành mảng JSON
+            }
+        }
+
         let product = new ProductModel({
             name: request.body.name,
             description: request.body.description,
-            image: imagesArr,
+            image: images,  // Lưu chuỗi JSON của danh sách ảnh
             brand: request.body.brand,
             price: request.body.price,
             oldPrice: request.body.oldPrice,
@@ -69,33 +79,31 @@ export async function createProduct(request, response) {
             rating: request.body.rating,
             isFeatured: request.body.isFeatured,
             discount: request.body.discount
-
-        })
+        });
 
         product = await product.save();
 
         if (!product) {
-            response.status(500).json({
+            return response.status(500).json({
                 error: true,
                 success: false,
-                message: "Product not created"
-            })
+                message: "Không thể tạo sản phẩm"
+            });
         }
 
-        imagesArr = [];
-
-        response.status(200).json({
-            message: "Product created successfully",
+        return response.status(200).json({
+            message: "Tạo sản phẩm thành công",
             error: false,
-            success: true
-        })
+            success: true,
+            data: product
+        });
 
     } catch (error) {
         return response.status(500).json({
             message: error.message || error,
             error: true,
             success: false
-        })
+        });
     }
 }
 
@@ -719,50 +727,96 @@ export async function removeImageFromCloudinary(request, response) {
 }
 
 //update product
-export async function updateProduct(request, response) {
+export async function updateProduct(req, res) {
     try {
-        const product = await ProductModel.findByIdAndUpdate(
-            request.params.id,
-            {
-                name: request.body.name,
-                description: request.body.description,
-                image: request.body.image,
-                brand: request.body.brand,
-                price: request.body.price,
-                oldPrice: request.body.oldPrice,
-                catName: request.body.catName,
-                catId: request.body.catId,
-                subCat: request.body.subCat,
-                thirsubCat: request.body.thirsubCat,
-                thirsubCatId: request.body.thirsubCatId,
-                countInStock: request.body.countInStock,
-                rating: request.body.rating,
-                isFeatured: request.body.isFeatured,
-                discount: request.body.discount
-            },
-            { new: true }
-        );
+        // Lấy ID sản phẩm từ params
+        const { id } = req.params;
 
-        if (!product) {
-            response.status(404).json({
+        // Kiểm tra nếu không có ID
+        if (!id) {
+            return res.status(400).json({
+                message: "Product ID is required",
+                error: true,
+                success: false
+            });
+        }
+
+        // Tạo object chứa dữ liệu cập nhật (chỉ cập nhật những field có trong request body)
+        const updateData = {};
+        const allowedFields = [
+            "name", "description", "image", "brand", "price", "oldPrice", 
+            "catName", "catId", "subCat", "subCatId", "thirsubCat", "thirsubCatId", 
+            "countInStock", "rating", "isFeatured", "discount"
+        ];
+
+        allowedFields.forEach(field => {
+            if (req.body[field] !== undefined) {
+                updateData[field] = req.body[field];
+            }
+        });
+
+        // Kiểm tra nếu không có dữ liệu nào để cập nhật
+        if (Object.keys(updateData).length === 0) {
+            return res.status(400).json({
+                message: "No update data provided",
+                error: true,
+                success: false
+            });
+        }
+
+        // Cập nhật sản phẩm trong database
+        const updatedProduct = await ProductModel.findByIdAndUpdate(id, updateData, { new: true });
+
+        // Nếu không tìm thấy sản phẩm
+        if (!updatedProduct) {
+            return res.status(404).json({
                 message: "Product not found",
                 error: true,
                 success: false
             });
         }
-        imagesArr = [];
 
-        return response.status(200).json({
-            message: "Product is updated successfully",
+        return res.status(200).json({
+            message: "Product updated successfully",
+            product: updatedProduct,
             error: false,
             success: true
-        })
+        });
 
     } catch (error) {
-        return response.status(500).json({
-            message: error.message || error,
+        return res.status(500).json({
+            message: error.message || "Internal Server Error",
             error: true,
             success: false
-        })
+        });
     }
 }
+
+// get produrcts by sub category
+export const getProductsBySubCategory = async (req, res) => {
+    try {
+        const { subCategoryId } = req.query;
+
+        // Lọc sản phẩm theo subCategoryId
+        const products = await ProductModel.find({ subCatId: subCategoryId });
+
+        if (!products.length) {
+            return res.status(404).json({
+                success: false,
+                message: "Không tìm thấy sản phẩm nào trong subcategory này",
+            });
+        }
+
+        res.status(200).json({
+            success: true,
+            products,
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({
+            success: false,
+            message: "Có lỗi xảy ra",
+            error: error.message,
+        });
+    }
+};
