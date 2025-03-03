@@ -766,32 +766,3 @@ export async function updateProduct(request, response) {
         })
     }
 }
-
-// get produrcts by sub category
-export const getProductsBySubCategory = async (req, res) => {
-    try {
-        const { subCategoryId } = req.query;
-
-        // Lọc sản phẩm theo subCategoryId
-        const products = await ProductModel.find({ subCatId: subCategoryId });
-
-        if (!products.length) {
-            return res.status(404).json({
-                success: false,
-                message: "Không tìm thấy sản phẩm nào trong subcategory này",
-            });
-        }
-
-        res.status(200).json({
-            success: true,
-            products,
-        });
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({
-            success: false,
-            message: "Có lỗi xảy ra",
-            error: error.message,
-        });
-    }
-};

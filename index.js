@@ -15,13 +15,8 @@ import addressRoutes from './routes/address.routes.js';
 import userRoutes from './routes/user.routes.js'; // userRoutes từ develop
 import categoryRouter from "./routes/category.routes.js";
 
-// Cấu hình CORS
-app.use(cors({
-    origin: 'http://localhost:5173',  // Địa chỉ frontend
-    methods: ['GET', 'POST', 'PUT', 'DELETE'], // Các phương thức được phép
-    allowedHeaders: ['Content-Type', 'Authorization'], // Các header được phép
-}));
-app.options('*', cors());  // Cho phép mọi phương thức OPTIONS
+app.use(cors());
+app.options('*', cors());
 
 app.use(express.json());
 app.use(cookieParser());
