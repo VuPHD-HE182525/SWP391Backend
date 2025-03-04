@@ -59,10 +59,8 @@ router.post("/", auth, async (req, res) => {
     try {
         const { productId, quantity } = req.body;
         const userId = req.userId; // Get the authenticated user's ID
-
         // Check if the product is already in the cart
-        const existingCartItem = await CartProduct.findOne({ userId, productId });
-
+        const existingCartItem = await CartProduct.findOne({ userId, productId: productId });
         if (existingCartItem) {
             // If the product is already in the cart, update the quantity
             existingCartItem.quantity += quantity;
@@ -74,13 +72,23 @@ router.post("/", auth, async (req, res) => {
         const newCartItem = new CartProduct({
             userId,
             productId,
-            quantity,
+            quantity: quantity,
         });
 
         await newCartItem.save();
         res.status(201).json(newCartItem);
     } catch (error) {
         res.status(500).json({ error: "Failed to add item to cart" });
+    }
+});
+
+router.delete("/clear", auth, async (req, res) => {
+    try {
+        const userId = req.userId;
+        await CartProduct.deleteMany({ userId: userId });
+        res.json({ message: 'Cart cleared successfully' });
+    } catch (error) {
+        res.status(500).json({ error: 'Failed to clear cart' });
     }
 });
 

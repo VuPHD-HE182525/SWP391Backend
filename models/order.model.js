@@ -58,6 +58,11 @@ const orderSchema = new mongoose.Schema(
       type: Number,
       default: 0,
     },
+
+    status: {
+      type: String,
+      default: "Created",
+    },
   },
   { timestamps: true },
 );
