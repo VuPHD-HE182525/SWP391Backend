@@ -37,6 +37,16 @@ router.put("/:id", auth, async (req, res) => {
     }
 });
 
+router.delete("/clear", auth, async (req, res) => {
+    try {
+        const userId = req.userId;
+        await CartProduct.deleteMany({ userId: userId });
+        res.json({ message: 'Cart cleared successfully' });
+    } catch (error) {
+        res.status(500).json({ error: 'Failed to clear cart' });
+    }
+});
+
 router.delete("/:id", auth, async (req, res) => {
     try {
         const cartItemId = req.params.id;
@@ -79,16 +89,6 @@ router.post("/", auth, async (req, res) => {
         res.status(201).json(newCartItem);
     } catch (error) {
         res.status(500).json({ error: "Failed to add item to cart" });
-    }
-});
-
-router.delete("/clear", auth, async (req, res) => {
-    try {
-        const userId = req.userId;
-        await CartProduct.deleteMany({ userId: userId });
-        res.json({ message: 'Cart cleared successfully' });
-    } catch (error) {
-        res.status(500).json({ error: 'Failed to clear cart' });
     }
 });
 
