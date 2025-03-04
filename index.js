@@ -15,8 +15,13 @@ import addressRoutes from './routes/address.routes.js';
 import userRoutes from './routes/user.routes.js'; // userRoutes từ develop
 import categoryRouter from "./routes/category.routes.js";
 
-app.use(cors());
-app.options('*', cors());
+// Cấu hình CORS
+app.use(cors({
+    origin: 'http://localhost:5173',  // Địa chỉ frontend
+    methods: ['GET', 'POST', 'PUT', 'DELETE'], // Các phương thức được phép
+    allowedHeaders: ['Content-Type', 'Authorization'], // Các header được phép
+}));
+app.options('*', cors());  // Cho phép mọi phương thức OPTIONS
 
 app.use(express.json());
 app.use(cookieParser());
@@ -29,7 +34,9 @@ app.use(helmet({
 app.use('/api/cart', cartRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/addresses', addressRoutes);
-app.use('/api/user', userRoutes);   // Sử dụng userRouter từ feature
+
+app.use('/api/user', userRouter); 
+app.use('/api/users', userRoutes);
 app.use('/api/category', categoryRouter);
 app.use('/api/product', productRouter);
 
